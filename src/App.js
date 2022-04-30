@@ -50,8 +50,7 @@ function App() {
         if (newList.includes(id)) {
             newList.splice(newList.indexOf(id), 1);
             setStoreWhitelist(newList);
-        }
-        else {
+        } else {
             newList.push(id);
             setStoreWhitelist(newList);
         }
@@ -100,11 +99,6 @@ function App() {
                             </Button>
                         </Grid>
                     </Grid>
-                    <br/>
-                    <Button onClick={() => {
-                        setPaxNum('J75VWZ');
-                        setUsedNum('J75VWZ');
-                    }}>Test</Button>
                     <br/>
                     <PaxTable config={usedNum} zip={zip} stores={stores} whitelist={storeWhitelist}/>
                 </CardContent>
