@@ -1,15 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
 import {
-    AppBar,
     Box,
     Button,
     Card,
     CardContent,
     CardHeader, Checkbox, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText,
     TextField,
-    Toolbar,
-    Typography,
     useTheme
 } from "@mui/material";
 import {css} from "@emotion/react";
@@ -33,7 +30,7 @@ function App() {
     };
     const [paxNum, setPaxNum] = useState('');
     const [zip, setZip] = useState('8052');
-    const [usedNum, setUsedNum] = useState(null);
+    const [usedNum, setUsedNum] = useState([]);
     const [stores, setStores] = useState([]);
     const [storeWhitelist, setStoreWhitelist] = useState([]);
 
@@ -94,7 +91,10 @@ function App() {
                             />
                         </Grid>
                         <Grid item xs={2}>
-                            <Button color="primary" onClick={() => setUsedNum(paxNum)}>
+                            <Button
+                                color="primary"
+                                onClick={() => setUsedNum(paxNum.replace(/ /ig, '').split(','))}
+                            >
                                 Check
                             </Button>
                         </Grid>

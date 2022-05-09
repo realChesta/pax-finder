@@ -23,7 +23,20 @@ const PaxTable = props => {
         console.log(props.config);
         if (props.config && props.config.length) {
             (async () => {
-                const pis = await apis.pax.getArticlesFromPaxCode(props.config);
+                let pis = [];
+                for (let code of props.config) {
+                    let items = await apis.pax.getArticlesFromPaxCode(code);
+                    for (let i of items) {
+                        let f = pis.find(pi => pi.itemNo === i.itemNo);
+                        if (f) {
+                            f.quantity += i.quantity;
+                        }
+                        else {
+                            pis.push(i);
+                        }
+                        // debugger;
+                    }
+                }
                 const details = await apis.item.getItemDetails(pis.map(p => p.itemNo));
                 const availabilities = await apis.item.getItemAvailabilities(pis.map(p => p.itemNo), props.zip);
                 for (let d of details) {
@@ -67,19 +80,23 @@ const PaxTable = props => {
 
             if (store.availableForCashCarry) {
                 let badgeStr = store.buyingOption.cashCarry.availability.quantity.toString();
+                let color = pi.amount <= store.buyingOption.cashCarry.availability.quantity ? "primary" : "error";
                 if (restock) {
                     badgeStr += '*';
+                    if (restock.quantity >= pi.amount) {
+                        color = "secondary";
+                    }
                 }
                 chip = (
                     <Badge
-                        color="primary"
+                        color={color}
                         badgeContent={badgeStr}
                         key={store.classUnitKey.classUnitCode}
                         sx={{margin: '0.5em'}}
                     >
                         <Chip
                             label={format.getStoreName(props.stores, store.classUnitKey.classUnitCode)}
-                            variant="outlined" color="primary"
+                            variant="outlined" color={color}
                         />
                     </Badge>
                 );
@@ -93,7 +110,7 @@ const PaxTable = props => {
                     >
                         <Chip
                             label={format.getStoreName(props.stores, store.classUnitKey.classUnitCode)}
-                            variant="outlined" color="secondary"
+                            variant="outlined" color={restock.quantity >= pi.amount ? "secondary" : "error"}
                         />
                     </Badge>
                 );
