@@ -63,7 +63,7 @@ const PaxTable = props => {
                 </Badge>
             );
         } else {
-            deliveryChip = <Chip label="No" variant="outlined" color="secondary"/>
+            deliveryChip = <Chip label="No" variant="outlined" color="error"/>
         }
 
 
